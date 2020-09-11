@@ -32,6 +32,10 @@ void test_file_obj()
         auto unr = make_unique_resource_checked(CreateFile(strName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL),
             INVALID_HANDLE_VALUE,
             CloseHandleDeleter{});
+        if (INVALID_HANDLE_VALUE != unr.get())
+        {
+            // do something
+        }
     }
 
     // Open file
@@ -56,6 +60,10 @@ void test_gdi_obj()
     auto unr = make_unique_resource_checked(CreatePen(PS_SOLID, 3, RGB(50, 50, 50)),
         (HPEN)NULL,
         DeleteObjectDeleter{});
+    if (unr.get())
+    {
+        // Do something
+    }
 }
 
 void test_reg_key()
