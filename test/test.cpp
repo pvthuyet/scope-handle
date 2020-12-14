@@ -10,18 +10,55 @@
 using std::experimental::make_unique_resource_checked;
 using namespace fibo;
 
+void test_file_reader();
 void test_file_obj();
 void test_gdi_obj();
 void test_reg_key();
 int test_map_file();
 
+struct file_reader
+{
+    std::experimental::unique_resource<HANDLE, CloseHandleDeleter> mFileHandle{ make_unique_resource_checked(INVALID_HANDLE_VALUE, INVALID_HANDLE_VALUE, CloseHandleDeleter{}) };
+    ~file_reader() {
+        int xx = 0;
+        xx = 0;
+    }
+
+    void read()
+    {
+        const TCHAR* strName = _T("data\\create_file.txt");
+        {
+            mFileHandle = make_unique_resource_checked(CreateFile(strName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL),
+                INVALID_HANDLE_VALUE,
+                CloseHandleDeleter{});
+            if (INVALID_HANDLE_VALUE != mFileHandle.get())
+            {
+                std::cout << "file_reader::read\n";
+            }
+        }
+        std::cout << "destroy handle file yet????\n";
+    }
+};
+
 int main()
 {
+    test_file_reader();
+    return 0;
+
     test_file_obj();
     test_gdi_obj();
     test_reg_key();
     test_map_file();
     return 0;
+}
+
+void test_file_reader()
+{
+    file_reader reader;
+    {
+        reader.read();
+        int xx = 0;
+    }
 }
 
 void test_file_obj()
